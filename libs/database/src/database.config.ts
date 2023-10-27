@@ -6,7 +6,7 @@ import { Role } from "./entities/role.entity";
 import { Students } from "./entities/student.entity";
 export const databaseConfig: TypeOrmModuleOptions = {
   type: "postgres",
-  host: "localhost",
+  host: "postgres",
   port: 5432,
   username: "postgres",
   password: "postgres",
