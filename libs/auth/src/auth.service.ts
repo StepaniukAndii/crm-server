@@ -49,7 +49,7 @@ export class AuthService {
       });
 
     return {
-      message: ["User registration successfully"],
+      message: "User registration successfully",
     };
   }
 

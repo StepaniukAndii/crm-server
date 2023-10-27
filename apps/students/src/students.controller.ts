@@ -6,13 +6,12 @@ import {
   Param,
   Post,
   Put,
-  Query,
   UseGuards,
 } from "@nestjs/common";
-import { StudentsService } from "./students.service";
 import { StudentDto } from "apps/dto/student/student.dto";
+
+import { StudentsService } from "./students.service";
 import { JwtAuthGuard } from "@app/auth/jwt-auth.guard";
-import { StudentDeleteDto } from "apps/dto/student/student.delete.dto";
 
 @Controller("api/v1")
 export class StudentsController {
@@ -20,14 +19,17 @@ export class StudentsController {
 
   @Post("student")
   @UseGuards(JwtAuthGuard)
-  async createUser(@Body() registerDto: StudentDto) {
+  async createStudent(@Body() registerDto: StudentDto) {
     console.log(registerDto);
     return this.studentsService.create(registerDto);
   }
 
-  @Put("student")
+  @Put("student/:id")
   @UseGuards(JwtAuthGuard)
-  async updateUser(@Body() registerDto: StudentDto, @Param("id") id: number) {
+  async updateStudent(
+    @Body() registerDto: StudentDto,
+    @Param("id") id: number
+  ) {
     return this.studentsService.update(registerDto, id);
   }
 
@@ -37,9 +39,9 @@ export class StudentsController {
     return this.studentsService.getAllStudents();
   }
 
-  @Delete("student")
+  @Delete("student/:id")
   @UseGuards(JwtAuthGuard)
-  async deleteUser(@Body() registerDto: StudentDeleteDto) {
-    return this.studentsService.delete(registerDto);
+  async deleteStudent(@Param("id") id: number) {
+    this.studentsService.delete(id);
   }
 }

@@ -16,11 +16,8 @@ export class StudentsService {
     return this.studentRepository.findOne({ where: { id } });
   }
 
-  async create(user: StudentDto): Promise<Students> {
-    const date = new Date().getTime() - new Date(user.signed_up).getTime();
-    const day = Math.floor(date / (24 * 60 * 60 * 1000));
-
-    return this.studentRepository.save({ ...user, study_time: day });
+  async create(student: StudentDto): Promise<Students> {
+    return this.studentRepository.save(student);
   }
 
   async update(registerDto: StudentDto, id: number) {
@@ -35,16 +32,35 @@ export class StudentsService {
     return this.studentRepository.save(student);
   }
 
-  async delete(registerDto: StudentDeleteDto) {
-    return this.studentRepository.delete({ email: registerDto.email });
+  async delete(id: number) {
+    const student = await this.studentRepository.findOne({ where: { id } });
+    if (!student) {
+      throw new Error(`Student with ID ${id} not found`);
+    }
+
+    await this.studentRepository.remove(student);
   }
 
   async getAllStudents() {
     const allRows = await this.studentRepository.find();
     allRows.forEach((row) => {
-      const date = new Date().getTime() - new Date(row.signed_up).getTime();
-      const day = Math.floor(date / (24 * 60 * 60 * 1000));
-      row.study_time = day;
+      const dateParts = row.signed_up.split("-"); // Розбиваємо рядок на частини
+      if (dateParts.length !== 3) {
+        throw new Error("Некоректний формат дати");
+      }
+
+      const year = parseInt(dateParts[0], 10);
+      const month = parseInt(dateParts[1], 10) - 1; // Місяць починається з 0
+      const day = parseInt(dateParts[2], 10);
+
+      const signupDate = new Date(year, month, day); // Створюємо об'єкт дати
+
+      const currentDate = new Date();
+
+      const dateDiffInDays = Math.floor(
+        (currentDate.getTime() - signupDate.getTime()) / (24 * 60 * 60 * 1000)
+      );
+      row.study_time = dateDiffInDays;
     });
 
     return allRows;

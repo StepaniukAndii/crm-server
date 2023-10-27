@@ -15,9 +15,8 @@ export class Students extends BaseModel {
   @Column()
   mentor: string;
 
-  @Column({ type: "date" })
-  signed_up: Date;
+  @Column()
+  signed_up: string;
 
-  @Column({ default: 0 })
   study_time: number;
 }

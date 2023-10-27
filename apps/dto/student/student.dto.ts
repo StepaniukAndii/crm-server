@@ -25,5 +25,5 @@ export class StudentDto {
 
   @IsNotEmpty()
   @ApiProperty()
-  signed_up: Date;
+  signed_up: string;
 }
