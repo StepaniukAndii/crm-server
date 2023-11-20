@@ -44,4 +44,10 @@ export class StudentsController {
   async deleteStudent(@Param("id") id: number) {
     this.studentsService.delete(id);
   }
+
+  @Get("student/:id")
+  @UseGuards(JwtAuthGuard)
+  async getStudent(@Param("id") id: number) {
+    this.studentsService.getStudent(id);
+  }
 }

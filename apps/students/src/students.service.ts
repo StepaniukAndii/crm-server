@@ -41,6 +41,10 @@ export class StudentsService {
     await this.studentRepository.remove(student);
   }
 
+  async getStudent(id: number) {
+    return await this.studentRepository.findOne({ where: { id } });
+  }
+
   async getAllStudents() {
     const allRows = await this.studentRepository.find();
     allRows.forEach((row) => {
